@@ -79,7 +79,7 @@
 					v-bind="autosuggestOptions"
 					@selected="selectSuggestion"
 					@focus="() => (isFocused = true)"
-					@blur="() => (isFocused = false)"
+					@blur="onBlur"
 				/>
 			</div>
 			<multilingual-progress
@@ -323,6 +323,14 @@ export default {
 			});
 		},
 
+		onBlur() {
+			this.isFocused = false;
+
+			// clear the input to make obvious that the selection was not saved
+			setTimeout(() => {
+				this.inputValue = '';
+			}, 200);
+		},
 		/**
 		 * Respond to selected events from vue-autosuggest
 		 *

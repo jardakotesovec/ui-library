@@ -5,6 +5,14 @@ import debounce from 'debounce';
 export default {
 	name: 'FieldControlledVocab',
 	extends: FieldBaseAutosuggest,
+	props: {
+		splitSelectionBySeparator: {
+			type: Boolean,
+			default() {
+				return false;
+			},
+		},
+	},
 	data() {
 		return {
 			allSuggestions: [],
@@ -63,10 +71,22 @@ export default {
 			if (suggestion) {
 				this.select(suggestion.item);
 			} else if (this.inputValue) {
-				this.select({
-					value: this.inputValue,
-					label: this.inputValue,
-				});
+				if (this.splitSelectionBySeparator) {
+					this.inputValue
+						.split(',')
+						.map((item) => item.trim())
+						.forEach((item) => {
+							this.select({
+								value: item,
+								label: item,
+							});
+						});
+				} else {
+					this.select({
+						value: this.inputValue,
+						label: this.inputValue,
+					});
+				}
 			}
 		},
 
