@@ -30,14 +30,18 @@
 							<div class="flex-grow">
 								<!-- @slot Small text above title, might be useful for example to display submission Id-->
 								<div class="text-xl-medium"><slot name="pre-title"></slot></div>
-								<DialogTitle as="h1" class="mt-1 text-4xl-bold">
-									<!-- @slot Main title, also used for accessibility (aria-labelledby) -->
-									<slot name="title"></slot>
-								</DialogTitle>
-								<DialogDescription class="mt-1 text-3xl-normal">
-									<!-- @slot Optionally descrition, also used for accessibility (aria-describedby) -->
-									<slot name="description"></slot>
-								</DialogDescription>
+								<div>
+									<DialogTitle as="h1" class="mt-1 text-4xl-bold">
+										<!-- @slot Main title, also used for accessibility (aria-labelledby) -->
+										<slot name="title"></slot>
+									</DialogTitle>
+								</div>
+								<div>
+									<DialogDescription class="mt-1 text-3xl-normal">
+										<!-- @slot Optionally descrition, also used for accessibility (aria-describedby) -->
+										<slot name="description"></slot>
+									</DialogDescription>
+								</div>
 								<div class="mt-1">
 									<!-- @slot For additional information that needs to be in the modal header add it here, check submissionSummaryModal.vue for good example -->
 									<slot name="post-description"></slot>

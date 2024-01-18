@@ -42,9 +42,9 @@
 				View submission in detail
 			</PkpButton>
 		</template>
-		<div class="border-ligh flex w-full border-r border-t border-light">
-			<div class="w-3/5 border-r border-light p-4">
-				<div class="bg-lightest p-5">
+		<div class="body-container">
+			<div class="left-panel">
+				<div class="left-panel-content">
 					<p>
 						Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
 						eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
@@ -71,8 +71,8 @@
 					</p>
 				</div>
 			</div>
-			<div class="w-2/5">
-				<div class="flex flex-col space-y-2 border-b border-light p-4">
+			<div class="right-panel">
+				<div class="right-panel-actions">
 					<div>
 						<PkpButton :is-primary="true" class="inline-flex">
 							Send submission for review
@@ -126,3 +126,51 @@ const summaryStore = useSubmissionSummaryStore();
 
 const {submission} = storeToRefs(summaryStore);
 </script>
+
+<style>
+:root {
+	--border-color-light: #dddddd;
+	--border-width: 1px;
+	--size-2: 0.5rem;
+
+	--size-4: 1rem;
+	--size-5: 1.25rem;
+	--bg-color-lightest: #ffffff;
+}
+</style>
+<style scoped>
+.body-container {
+	border-color: var(--border-color-light);
+	display: flex;
+	width: 100%;
+	border-top-width: var(--border-width);
+}
+
+.left-panel {
+	width: 60%;
+	border-color: var(--border-color-light);
+	border-right-width: var(--border-width);
+	padding: var(--size-4);
+}
+
+.left-panel-content {
+	background-color: var(--bg-color-lightest);
+	padding: var(--size-5);
+}
+
+.right-panel {
+	width: 40%;
+}
+
+.right-panel-actions {
+	display: flex;
+	flex-direction: column;
+	border-bottom-width: var(--border-width);
+	border-color: var(--border-color-light);
+	padding: var(--size-4);
+}
+
+.right-panel-actions > * + * {
+	margin-top: var(--size-2); /* or 8px */
+}
+</style>
