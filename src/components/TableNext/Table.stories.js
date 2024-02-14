@@ -1,7 +1,10 @@
 import {ref, computed} from 'vue';
 import PkpTable from './Table.vue';
-import TableCell from './TableCell.vue';
 import TableHeader from './TableHeader.vue';
+import TableBody from './TableBody.vue';
+import TableColumn from './TableBody.vue';
+import TableCell from './TableCell.vue';
+import TableRow from './TableRow.vue';
 import ButtonRow from '@/components/ButtonRow/ButtonRow.vue';
 import Pagination from '@/components/Pagination/Pagination.vue';
 
@@ -14,7 +17,14 @@ export default {
 
 export const Default = {
 	render: (args) => ({
-		components: {PkpTable, TableCell, TableHeader},
+		components: {
+			PkpTable,
+			TableHeader,
+			TableBody,
+			TableRow,
+			TableColumn,
+			TableCell,
+		},
 		setup() {
 			const rows = articleStats.slice(0, 10);
 

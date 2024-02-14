@@ -8,15 +8,15 @@
 	</component>
 </template>
 
-<script>
-export default {
-	props: {
-		isRowHeader: {
-			type: Boolean,
-			default() {
-				return false;
-			},
+<script setup>
+import {defineProps} from 'vue';
+
+defineProps({
+	isRowHeader: {
+		type: Boolean,
+		default() {
+			return false;
 		},
 	},
-};
+});
 </script>

@@ -22,8 +22,7 @@
 			<SubmissionsTable
 				:submissions="store.submissions"
 				:columns="store.columns"
-				:sort-column="store.sortColumnId"
-				:sort-direction="store.sortDirection"
+				:sort-descriptor="store.sortDescriptor"
 				:pagination="store.submissionsPagination"
 				@sort-column="store.applySort"
 			/>

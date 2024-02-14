@@ -1,18 +1,35 @@
 <template>
-	<table class="pkpTableNext">
-		<caption v-if="$slots.caption">
-			<slot name="caption" />
-		</caption>
-		<thead v-if="$slots.head">
-			<tr>
-				<slot name="head" />
-			</tr>
-		</thead>
-		<tbody>
-			<slot />
-		</tbody>
+	<table class="pkpTableNext" :aria-label="ariaLabel">
+		<slot />
 	</table>
 </template>
+
+<script setup>
+import {provide, toRefs, defineEmits} from 'vue';
+
+const emit = defineEmits(['sort']);
+
+function onSort(columnKey) {
+	emit('sort', columnKey);
+}
+
+const props = defineProps({
+	ariaLabel: {type: String, required: true},
+	/**
+	 * object {column: String, direction: String}
+	 */
+	sortDescriptor: {type: Object, default: null, required: false},
+});
+
+const {sortDescriptor} = toRefs(props);
+
+const tableContext = {
+	sortDescriptor,
+	onSort,
+};
+
+provide('tableContext', tableContext);
+</script>
 
 <style lang="less">
 @import '../../styles/_import';
