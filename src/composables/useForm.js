@@ -27,6 +27,20 @@ function mapFromSelectedToValue(selected) {
 export function useForm(_form) {
 	const form = ref(_form);
 
+	function set(key, data) {
+		console.log('form set:', key, data);
+		//let component = {...get(key)};
+		Object.keys(data).forEach(function (dataKey) {
+			form.value[dataKey] = data[dataKey];
+		});
+	}
+
+	function getValue(name) {
+		const field = getField(form.value, name);
+
+		return field.value;
+	}
+
 	function setValue(name, inputValue) {
 		const field = getField(form.value, name);
 		if (!field) {
@@ -69,7 +83,9 @@ export function useForm(_form) {
 	}
 
 	return {
+		set,
 		setValue,
+		getValue,
 		clearForm,
 		form,
 	};
