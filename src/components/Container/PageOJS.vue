@@ -1,10 +1,10 @@
 <script>
 import Page from '@/components/Container/Page.vue';
-import SubmissionsPage from '@/pages/submissions/SubmissionsPage.vue';
+import DashboardPage from '@/pages/dashboard/DashboardPage.vue';
 
 export default {
 	components: {
-		SubmissionsPage,
+		DashboardPage,
 	},
 	extends: Page,
 };
