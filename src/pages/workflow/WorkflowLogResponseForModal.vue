@@ -11,11 +11,11 @@
 		</template>
 		<div class="px-8 h-full">
 			<div class="bg-secondary h-full">
-				<form class="pkpForm -pkpClearfix h-full" method="GET" action="https://httpbin.org" issaving="false">
+				<form class="pkpForm -pkpClearfix h-full">
 					<div class="form-flex h-full">
 						<fieldset class="pkpFormGroup -pkpClearfix">
 							<FieldOptions
-								v-bind="form"
+								v-bind="logResponseForm"
 								@change="change"
 							/>
 						</fieldset>
@@ -83,8 +83,8 @@ export default {
 			required: true
 		}
 	},
-	setup(props, {emit}) {
-		const acceptReview = ref(false);
+	setup(props) {
+		const acceptReview = ref(0);
 		const closeModal = inject('closeModal');
 
 		const logResponseForm = {
@@ -104,8 +104,8 @@ export default {
 			type: 'radio',
 			showWhen: 'options-confirmation',
 			options: {
-				0: {value: true, label: t('editor.review.logResponse.form.option.accepted')},
-				1: {value: false, label: t('editor.review.logResponse.form.option.declined')},
+				0: {value: 1, label: t('editor.review.logResponse.form.option.accepted')},
+				1: {value: 0, label: t('editor.review.logResponse.form.option.declined')},
 			}
 		}
 
@@ -113,53 +113,28 @@ export default {
 			acceptReview.value = value;
 		}
 
-		function submit() {
-			// props.legacyOptions.modalHandler
-			// .getHtmlElement()
-			// .trigger('dataChanged', props.reviewAssignmentId);
+	function submit() {
+	  // props.legacyOptions.modalHandler
+	  // .getHtmlElement()
+	  // .trigger('dataChanged', props.reviewAssignmentId);
 
-			$.ajax({
-				url: props.url,
-				type: 'POST',
-				data: {
-					acceptReview: acceptReview.value,
-					csrfToken: pkp.currentUser.csrfToken,
-				},
-				error: this.ajaxErrorCallback,
-				success(r) {
-					//SHOW SUCCESS MESSAGE
-				},
-			});
+	  $.ajax({
+			url: props.url,
+			type: 'POST',
+			data: {
+				acceptReview: acceptReview.value,
+				csrfToken: pkp.currentUser.csrfToken,
+			},
+			// error: this.ajaxErrorCallback,
+			success(r) {
+				//SHOW SUCCESS MESSAGE
+			},
+		});
 
-			closeModal();
-		}
+	  closeModal();
+	}
 
 		return {submit, change, acceptReview, logResponseForm};
-	},
-	data() {
-		return {
-			form: {
-				// groupId: 'preferences',
-				formId: 'default',
-				isRequired: true,
-				primaryLocale: this.submissionLocale,
-				locales: this.journalLocales,
-				// allErrors: {
-				// 	acceptReview: [this.responseRequired],
-				// },
-				name: 'acceptReview',
-				component: 'field-options',
-				label: t('editor.review.logResponse.form.detail'),
-				description: t('editor.review.logResponse.form.subDetail'),
-				value: {},
-				type: 'radio',
-				showWhen: 'options-confirmation',
-				options: {
-					0: {value: true, label: t('editor.review.logResponse.form.option.accepted')},
-					1: {value: false, label: t('editor.review.logResponse.form.option.declined')},
-				}
-			}
-		}
 	}
 };
 
