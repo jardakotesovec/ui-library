@@ -120,10 +120,11 @@ export default {
 				data: {
 					acceptReview: acceptReview.value,
 					csrfToken: pkp.currentUser.csrfToken,
-				}
+				},
+				success(r) {
+				  closeModal();
+				},
 			});
-
-			closeModal();
 		}
 
 		function cancel() {
