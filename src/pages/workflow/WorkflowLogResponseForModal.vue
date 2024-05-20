@@ -22,7 +22,7 @@
 						<div>
 							<div class="buttonRow pkpFormPage__footer">
 								<div>
-									<PkpButton :is-warnable="true" class="cancelButton">{{ t('common.cancel') }}</PkpButton>
+									<PkpButton :is-warnable="true" class="cancelButton" @click="cancel">{{ t('common.cancel') }}</PkpButton>
 									<PkpButton class="saveFormButton bg-primary" @click="submit">{{ t('editor.review.logResponse') }}</PkpButton>
 								</div>
 							</div>
@@ -63,7 +63,7 @@ export default {
 			required: true
 		},
 		journalLocales: {
-			type: Array,
+			type: Object,
 			required: true
 		},
 		submissionId: {
@@ -113,28 +113,25 @@ export default {
 			acceptReview.value = value;
 		}
 
-	function submit() {
-	  // props.legacyOptions.modalHandler
-	  // .getHtmlElement()
-	  // .trigger('dataChanged', props.reviewAssignmentId);
+		function submit() {
+			$.ajax({
+				url: props.url,
+				type: 'POST',
+				data: {
+					acceptReview: acceptReview.value,
+					csrfToken: pkp.currentUser.csrfToken,
+				}
+			});
 
-	  $.ajax({
-			url: props.url,
-			type: 'POST',
-			data: {
-				acceptReview: acceptReview.value,
-				csrfToken: pkp.currentUser.csrfToken,
-			},
-			// error: this.ajaxErrorCallback,
-			success(r) {
-				//SHOW SUCCESS MESSAGE
-			},
-		});
+			closeModal();
+		}
 
-	  closeModal();
-	}
+		function cancel() {
+	  	acceptReview.value = null;
+		  closeModal();
+		}
 
-		return {submit, change, acceptReview, logResponseForm};
+		return {submit, change, cancel, acceptReview, logResponseForm};
 	}
 };
 
