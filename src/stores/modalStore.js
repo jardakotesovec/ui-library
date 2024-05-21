@@ -56,7 +56,7 @@ export const useModalStore = defineStore('modal', () => {
 	 *
 	 */
 
-		// object structure: { modalId, props, opened, component}
+	// object structure: { modalId, props, opened, component}
 	const sideModal1 = ref(null);
 
 	// object structure: { modalId, props, opened, component}
@@ -137,14 +137,14 @@ export const useModalStore = defineStore('modal', () => {
 		// to trigger handler modalClose explicitelly
 		if (
 			triggerLegacyCloseHandler &&
-			modalToClose.value?.props?.options?.modalHandler
+			modalToClose.value?.props?.legacyOptions?.modalHandler
 		) {
-			modalToClose.value?.props?.options?.modalHandler.modalClose();
+			modalToClose.value?.props?.legacyOptions?.modalHandler.modalClose();
 		}
 	}
 
 	// Listener for open modal requests coming from legacy handler.
-	pkp.eventBus.$on('open-modal-vue', (_args) => {
+	pkp?.eventBus?.$on('open-modal-vue', (_args) => {
 		const props = _args.options?.props || {};
 		openSideModal(
 			_args.component,
@@ -155,7 +155,7 @@ export const useModalStore = defineStore('modal', () => {
 
 	// For special case when the closing modal is delayed, but we know it will be closed.
 	// Therefore any quick subsequent modal open should replace this one rather than creating second level
-	pkp.eventBus.$on('close-modal-vue-soon', (_args) => {
+	pkp?.eventBus?.$on('close-modal-vue-soon', (_args) => {
 		const modalId = _args.modalId;
 		if (sideModal1.value?.modalId === modalId) {
 			sideModal1.value.toBeClosed = true;
@@ -166,17 +166,17 @@ export const useModalStore = defineStore('modal', () => {
 	});
 
 	// Listener for close modal requests coming from legacy handler.
-	pkp.eventBus.$on('close-modal-vue', (_args) => {
+	pkp?.eventBus?.$on('close-modal-vue', (_args) => {
 		closeSideModal(false, _args.modalId);
 	});
 
 	// Listener for open dialog modals coming from legacy handler.
-	pkp.eventBus.$on('open-dialog-vue', (_args) => {
+	pkp?.eventBus?.$on('open-dialog-vue', (_args) => {
 		openDialog(_args.dialogProps);
 	});
 
 	// Listener for close dialog modals coming from legacy handler.
-	pkp.eventBus.$on('close-dialog-vue', (_args) => {
+	pkp?.eventBus?.$on('close-dialog-vue', (_args) => {
 		closeDialog(false);
 	});
 
