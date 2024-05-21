@@ -14,7 +14,7 @@ const {legacyOptions} = defineProps({
 	 * Following the object used within AjaxModalHandler
 	 * Particularly important is `url` and `modalHandler`
 	 */
-  legacyOptions: {
+	legacyOptions: {
 		type: Object,
 		default: () => {},
 	},
@@ -26,7 +26,7 @@ const pkp = window.pkp;
 
 // Fetches html content from legacy endpoints
 const {data: modalData, fetch: fetchAssignParticipantPage} = useFetch(
-  legacyOptions.url,
+	legacyOptions.url,
 );
 
 // Legacy modal has mechanism where it needs to check with form whether it can close
@@ -66,7 +66,7 @@ function catchInsideClick(e) {
  */
 function passToHandlerElement(...args) {
 	if (legacyOptions.modalHandler) {
-	legacyOptions.modalHandler.getHtmlElement().trigger(...args);
+		legacyOptions.modalHandler.getHtmlElement().trigger(...args);
 	}
 
 	return;
