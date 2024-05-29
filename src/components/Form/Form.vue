@@ -1,5 +1,5 @@
 <template>
-	<form class="pkpForm -pkpClearfix" :method="method" :action="action">
+	<form class="pkpForm -pkpClearfix h-full" :method="method" :action="action">
 		<input
 			v-for="(value, name) in hiddenFields"
 			:key="name"
@@ -140,7 +140,7 @@ export default {
 		 * @return {Array}
 		 */
 		classes() {
-			let classes = [];
+			let classes = ['h-full'];
 			if (this.visibleLocales.length > 1) {
 				classes.push('pkpForm--hasManyVisibleLocales');
 			}
@@ -651,7 +651,10 @@ export default {
 }
 
 .pkpFormPage--current {
-	display: block;
+	height: 100%;
+	display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 	position: relative;
 	left: auto;
 }
