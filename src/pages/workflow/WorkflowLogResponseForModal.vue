@@ -23,20 +23,12 @@
 import {inject} from 'vue';
 import SideModalBody from '@/components/Modal/SideModalBody.vue';
 import PkpForm from '@/components/Form/Form.vue';
-import PkpButton from '@/components/Button/Button.vue';
-import FieldOptions from '@/components/Form/fields/FieldOptions.vue';
-import ajaxError from '@/mixins/ajaxError';
-import ButtonRow from '@/components/ButtonRow/ButtonRow.vue';
 
 export default {
 	components: {
 		SideModalBody,
-		PkpButton,
-		FieldOptions,
-		ButtonRow,
 		PkpForm,
 	},
-	mixins: [ajaxError],
 	props: {
 		description: {type: String, required: true},
 		submissionId: {type: Number, required: true},
