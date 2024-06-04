@@ -19,7 +19,7 @@
 
 <script setup>
 import {defineProps, defineEmits, computed} from 'vue';
-
+console.log('broken formatting');
 const props = defineProps({
 	/** Whether to use a `button` or `a` HTML tag. */
 	element: {
