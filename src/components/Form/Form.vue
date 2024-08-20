@@ -17,7 +17,7 @@
 			:primary-locale-key="primaryLocale"
 			:locales="availableLocales"
 			:visible="visibleLocales"
-			@updateLocales="setVisibleLocales"
+			@update-locales="setVisibleLocales"
 		/>
 		<div v-if="pages.length > 1" class="pkpForm__pageNav">
 			<ol class="pkpForm__pageNavList">
@@ -59,10 +59,10 @@
 				:available-locales="availableLocales"
 				:is-saving="isSaving"
 				@change="fieldChanged"
-				@pageSubmitted="nextPage"
-				@previousPage="setCurrentPage(false)"
-				@showField="showField"
-				@showLocale="showLocale"
+				@page-submitted="nextPage"
+				@previous-page="setCurrentPage(false)"
+				@show-field="showField"
+				@show-locale="showLocale"
 				@cancel="cancel"
 				@set-errors="setErrors"
 			/>
@@ -128,6 +128,8 @@ export default {
 		visibleLocales: Array,
 		/** The locale(s) supported by this form. If a form has multilingual fields, it will display a separate input control for each of these locales. */
 		supportedFormLocales: Array,
+		/** To make custom AJAX call, while still keep the error handling within Form */
+		customSubmit: Function,
 	},
 	emits: [
 		/** When the form props need to be updated. The payload is an object with any keys that need to be modified. */
@@ -285,7 +287,7 @@ export default {
 		/**
 		 * Submit the form
 		 */
-		submit() {
+		async submit() {
 			if (!this.canSubmit) {
 				return false;
 			}
@@ -303,8 +305,17 @@ export default {
 				this.isSaving = false;
 				return;
 			}
-
-			if (this.action === 'emit') {
+			if (this.customSubmit) {
+				const {data, validationErrors} = await this.customSubmit(
+					this.submitValues,
+				);
+				if (validationErrors) {
+					this.error({status: 400, responseJSON: validationErrors});
+				} else {
+					this.success(data);
+				}
+				this.complete();
+			} else if (this.action === 'emit') {
 				this.$emit('success', this.submitValues);
 			} else {
 				$.ajax({
