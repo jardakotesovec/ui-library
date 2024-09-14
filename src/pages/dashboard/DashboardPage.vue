@@ -104,6 +104,7 @@ const store = useDashboardPageStore(props);
 
 <style>
 .pkp_page_dashboard .app__main {
-	@apply bg-secondary p-0;
+	background-color: var(--background-color-secondary);
+	padding: 0;
 }
 </style>
