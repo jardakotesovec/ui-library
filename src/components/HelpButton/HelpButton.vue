@@ -6,7 +6,9 @@
 		@click.prevent
 	>
 		<Icon class="h-5 w-5 text-primary" icon="Help" />
-		<span class="-screenReader">{{ label }}</span>
+		<span :class="!showLabel ? '-screenReader' : ''">
+			{{ label || t('help.help') }}
+		</span>
 	</button>
 </template>
 
@@ -27,7 +29,13 @@ export default {
 		/** A localized label for screen readers. In English this should be "Help". */
 		label: {
 			type: String,
-			required: true,
+			required: false,
+			default: null,
+		},
+		showLabel: {
+			type: Boolean,
+			required: false,
+			default: false,
 		},
 	},
 };

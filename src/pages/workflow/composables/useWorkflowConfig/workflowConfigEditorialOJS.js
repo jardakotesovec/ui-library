@@ -162,6 +162,14 @@ export const WorkflowConfig = {
 				},
 			});
 
+			items.push({
+				component: 'HelpButton',
+				props: {
+					topic: 'editorial-workflow/submission',
+					showLabel: true,
+				},
+			});
+
 			return items;
 		},
 
