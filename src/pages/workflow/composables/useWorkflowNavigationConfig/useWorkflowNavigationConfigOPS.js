@@ -86,7 +86,7 @@ export function useWorkflowNavigationConfigOPS(pageInitConfig) {
 			items.push(
 				getPublicationItem({
 					name: 'dataCitations',
-					label: t('submission.dataCitations'),
+					label: t('submission.dataCitation.dataCitations'),
 				}),
 			);
 		}
@@ -156,7 +156,7 @@ export function useWorkflowNavigationConfigOPS(pageInitConfig) {
 			items.push(
 				getPublicationItem({
 					name: 'dataCitations',
-					label: t('submission.dataCitations'),
+					label: t('submission.dataCitation.dataCitations'),
 				}),
 			);
 		}

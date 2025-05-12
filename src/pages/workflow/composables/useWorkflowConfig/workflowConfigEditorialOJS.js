@@ -958,12 +958,7 @@ export const PublicationConfig = {
 		},
 	},
 	dataCitations: {
-		getPrimaryItems: ({
-			submission,
-			selectedPublication,
-			pageInitConfig,
-			permissions,
-		}) => {
+		getPrimaryItems: ({ submission, selectedPublication, pageInitConfig, permissions }) => {
 			return [
 				{
 					component: 'WorkflowPublicationForm',
@@ -972,6 +967,13 @@ export const PublicationConfig = {
 						submission,
 						publication: selectedPublication,
 						canEdit: permissions.canEditPublication,
+					},
+				},
+				{
+					component: 'DataCitationManager',
+					props: {
+						submission,
+						publication: selectedPublication,
 					},
 				},
 			];

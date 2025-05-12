@@ -428,7 +428,14 @@ export const PublicationConfig = {
 						canEdit: permissions.canEditPublication,
 					},
 				},
-			];
+				{
+					component: 'DataCitationManager',
+					props: {
+						submission,
+						publication: selectedPublication,
+					},
+				},
+			];			
 		},
 	},	
 	galleys: {
