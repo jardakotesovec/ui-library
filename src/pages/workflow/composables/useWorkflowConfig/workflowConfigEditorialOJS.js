@@ -950,6 +950,25 @@ export const PublicationConfig = {
 			];
 		},
 	},
+	bodyText: {
+		getPrimaryItems: ({
+			submission,
+			selectedPublication,
+			pageInitConfig,
+			permissions,
+		}) => {
+			return [
+				{
+					component: 'WorkflowPublicationEditor',
+					props: {
+						canEdit: permissions.canEditPublication,
+						submission,
+						publication: selectedPublication,
+					},
+				},
+			];
+		},
+	},
 	galleys: {
 		getPrimaryItems: ({submission, selectedPublication, permissions}) => {
 			return [

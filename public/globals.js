@@ -723,6 +723,7 @@ window.pkp = {
 		'publication.editDisabled':
 			'This version has been published and can not be edited.',
 		'publication.jats': 'JATS XML',
+		'publication.bodyText': 'Body Text',
 		'publication.jats.autoCreatedMessage':
 			'This JATS file is generated automatically by the submission metadata',
 		'publication.jats.confirmDeleteFileButton': 'Delete JATS File',

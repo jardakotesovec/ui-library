@@ -309,6 +309,13 @@ export function useWorkflowNavigationConfigOJS(pageInitConfig) {
 			}),
 		);
 
+		items.push(
+			getPublicationItem({
+				name: 'bodyText',
+				label: t('publication.bodyText'),
+			}),
+		);
+
 		if (permissions.canAccessProduction) {
 			items.push(
 				getPublicationItem({
