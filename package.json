@@ -15,6 +15,7 @@
   "dependencies": {
     "@headlessui/vue": "^1.7.23",
     "@highlightjs/vue-plugin": "^2.1.2",
+    "@iconify/vue": "^5.0.0",
     "@lk77/vue3-color": "^3.0.6",
     "@storybook/test": "^8.6.12",
     "@tinymce/tinymce-vue": "^6.1.0",
@@ -33,6 +34,7 @@
     "ofetch": "^1.4.1",
     "pinia": "^2.3.1",
     "primevue": "^4.3.3",
+    "reka-ui": "^2.3.1",
     "tiny-emitter": "^2.1.0",
     "tinymce": "^7.8.0",
     "uuid": "^9.0.1",
