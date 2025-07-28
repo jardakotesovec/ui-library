@@ -69,6 +69,11 @@ export default {
 				return false;
 			},
 		},
+		/** The currently selected tab, for controlled mode */
+		activeTab: {
+			type: [String, null],
+			default: null,
+		},
 	},
 	data() {
 		return {
@@ -83,7 +88,11 @@ export default {
 		 * @param {String} tabId
 		 */
 		setCurrentTab(tabId) {
-			this.currentTab = tabId;
+			if (this.activeTab === null) {
+				this.currentTab = tabId;
+			} else {
+				this.$emit('update:activeTab', tabId);
+			}
 			this.$nextTick(() => {
 				$(this.$refs['button' + tabId]).focus();
 				this.updateUrl();
@@ -155,6 +164,11 @@ export default {
 		currentTab(newVal, oldVal) {
 			this.tabs.forEach((tab) => tab.isActive(tab.id === newVal));
 		},
+		activeTab(newVal) {
+			if (newVal !== null) {
+				this.currentTab = newVal;
+			}
+		},
 	},
 	provide() {
 		return {
@@ -176,7 +190,11 @@ export default {
 		/**
 		 * Set the tab to view when loaded
 		 */
-		this.currentTab = this.defaultTab || this.tabs[0].id;
+		const initialTab =
+			this.activeTab !== null
+				? this.activeTab
+				: this.defaultTab || this.tabs[0]?.id || '';
+		this.currentTab = initialTab;
 
 		/**
 		 * Listen for global 'open-tab' events and open the correct tab when called
