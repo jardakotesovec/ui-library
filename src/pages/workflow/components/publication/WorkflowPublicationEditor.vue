@@ -25,94 +25,79 @@
 							<div class="control-group">
 								<div class="button-group">
 									<button
-										@click="editor.chain().focus().toggleBold().run()"
 										:disabled="!editor.can().chain().focus().toggleBold().run()"
 										:class="{'is-active': editor.isActive('bold')}"
+										@click="editor.chain().focus().toggleBold().run()"
 									>
 										Bold
 									</button>
 									<button
-										@click="editor.chain().focus().toggleItalic().run()"
 										:disabled="
 											!editor.can().chain().focus().toggleItalic().run()
 										"
 										:class="{'is-active': editor.isActive('italic')}"
+										@click="editor.chain().focus().toggleItalic().run()"
 									>
 										Italic
 									</button>
+
 									<button
-										@click="editor.chain().focus().toggleStrike().run()"
-										:disabled="
-											!editor.can().chain().focus().toggleStrike().run()
-										"
-										:class="{'is-active': editor.isActive('strike')}"
-									>
-										Strike
-									</button>
-									<button
-										@click="editor.chain().focus().toggleCode().run()"
-										:disabled="!editor.can().chain().focus().toggleCode().run()"
-										:class="{'is-active': editor.isActive('code')}"
-									>
-										Code
-									</button>
-									<button
-										@click="editor.chain().focus().setParagraph().run()"
 										:class="{'is-active': editor.isActive('paragraph')}"
+										@click="editor.chain().focus().setParagraph().run()"
 									>
 										Paragraph
 									</button>
 									<button
-										@click="
-											editor.chain().focus().toggleHeading({level: 1}).run()
-										"
 										:class="{
 											'is-active': editor.isActive('heading', {level: 1}),
 										}"
+										@click="
+											editor.chain().focus().toggleHeading({level: 1}).run()
+										"
 									>
 										H1
 									</button>
 									<button
-										@click="
-											editor.chain().focus().toggleHeading({level: 2}).run()
-										"
 										:class="{
 											'is-active': editor.isActive('heading', {level: 2}),
 										}"
+										@click="
+											editor.chain().focus().toggleHeading({level: 2}).run()
+										"
 									>
 										H2
 									</button>
 									<button
-										@click="
-											editor.chain().focus().toggleHeading({level: 3}).run()
-										"
 										:class="{
 											'is-active': editor.isActive('heading', {level: 3}),
 										}"
+										@click="
+											editor.chain().focus().toggleHeading({level: 3}).run()
+										"
 									>
 										H3
 									</button>
 									<button
-										@click="editor.chain().focus().toggleBulletList().run()"
 										:class="{'is-active': editor.isActive('bulletList')}"
+										@click="editor.chain().focus().toggleBulletList().run()"
 									>
 										Bullet list
 									</button>
 									<button
-										@click="editor.chain().focus().toggleOrderedList().run()"
 										:class="{'is-active': editor.isActive('orderedList')}"
+										@click="editor.chain().focus().toggleOrderedList().run()"
 									>
 										Ordered list
 									</button>
 									<button
-										@click="editor.chain().focus().toggleCodeBlock().run()"
 										:class="{'is-active': editor.isActive('codeBlock')}"
+										@click="editor.chain().focus().toggleCodeBlock().run()"
 									>
 										Code block
 									</button>
 									<button
-										@click="editor.chain().focus().toggleBlockquote().run()"
 										:class="{'is-active': editor.isActive('blockquote')}"
+										@click="editor.chain().focus().toggleBlockquote().run()"
 									>
 										Blockquote
 									</button>
@@ -124,21 +109,21 @@
 									<button @click="editor.chain().focus().setHardBreak().run()">
 										Hard break
 									</button>
-									<button
-										@click="editor.chain().focus().undo().run()"
+									<!--<button
 										:disabled="!editor.can().chain().focus().undo().run()"
+										@click="editor.chain().focus().undo().run()"
 									>
 										Undo
 									</button>
 									<button
-										@click="editor.chain().focus().redo().run()"
 										:disabled="!editor.can().chain().focus().redo().run()"
+										@click="editor.chain().focus().redo().run()"
 									>
 										Redo
-									</button>
+									</button>-->
 								</div>
 							</div>
-							<editor-content :editor="editor" />
+							<EditorContent :editor="editor" />
 						</div>
 					</div>
 				</div>
@@ -151,10 +136,45 @@
 </template>
 
 <script>
-import ListItem from '@tiptap/extension-list-item';
-import TextStyle from '@tiptap/extension-text-style';
-import StarterKit from '@tiptap/starter-kit';
+import Text from '@tiptap/extension-text';
+import HardBreak from '@tiptap/extension-hard-break';
 import {Editor, EditorContent} from '@tiptap/vue-3';
+import {Anchor} from '@/tiptap/extensions/Anchor';
+import {Bdi} from '@/tiptap/extensions/Bdi';
+import {Blockquote} from '@/tiptap/extensions/Blockquote';
+import {Caption} from '@/tiptap/extensions/Caption';
+import {Citation} from '@/tiptap/extensions/Citation';
+import {Code} from '@/tiptap/extensions/Code';
+import {CustomDocument} from '@/tiptap/extensions/Document';
+import {Figure} from '@/tiptap/extensions/Figure';
+import {Footnote} from '@/tiptap/extensions/Footnote';
+import {Header} from '@/tiptap/extensions/Header';
+import {Heading} from '@/tiptap/extensions/Heading';
+import {HorizontalRule} from '@/tiptap/extensions/HorizontalRule';
+import {Image} from '@/tiptap/extensions/Image';
+import {Label} from '@/tiptap/extensions/Label';
+import {Link} from '@/tiptap/extensions/Link';
+import {Math} from '@/tiptap/extensions/Math';
+import {PageBreak} from '@/tiptap/extensions/PageBreak';
+import {Paragraph} from '@/tiptap/extensions/Paragraph';
+import {Part} from '@/tiptap/extensions/Part';
+import {Placeholder} from '@/tiptap/extensions/Placeholder';
+import {Sidebar} from '@/tiptap/extensions/Sidebar';
+import {Subtitle} from '@/tiptap/extensions/Subtitle';
+import {Subscript} from '@/tiptap/extensions/Subscript';
+import {Superscript} from '@/tiptap/extensions/Superscript';
+import {Tags} from '@/tiptap/extensions/Tags';
+import {Emphasis} from '@/tiptap/extensions/Emphasis';
+import {Strong} from '@/tiptap/extensions/Strong';
+
+import {CustomListItem} from '@/tiptap/extensions/ListItem';
+import {CustomBulletList} from '@/tiptap/extensions/BulletList';
+import {CustomOrderedList} from '@/tiptap/extensions/OrderedList';
+import {CustomTable} from '@/tiptap/extensions/Table';
+
+import {CustomTableRow} from '@/tiptap/extensions/TableRow';
+import {CustomTableCell} from '@/tiptap/extensions/TableCell';
+import {CustomTableHeader} from '@/tiptap/extensions/TableHeader';
 
 import {useId} from 'vue';
 import PkpButton from '@/components/Button/Button.vue';
@@ -162,6 +182,374 @@ import PkpHeader from '@/components/Header/Header.vue';
 import ajaxError from '@/mixins/ajaxError';
 import dialog from '@/mixins/dialog.js';
 import {useUrl} from '@/composables/useUrl';
+
+const documentExampleJson = {
+	type: 'doc',
+	attrs: {
+		type: 'article',
+	},
+	content: [
+		{
+			type: 'header',
+			content: [
+				{
+					type: 'heading',
+					attrs: {
+						id: 'c20f504',
+						level: 1,
+						type: 'chapter',
+					},
+					content: [
+						{
+							type: 'text',
+							text: 'Testing title',
+						},
+					],
+				},
+			],
+		},
+		{
+			type: 'part',
+			attrs: {
+				id: 'p-a1e34ca3-0a12-40d8-8169-184949d393a8',
+				type: 'abstract',
+				skipToc: false,
+				data: {
+					altTitle: [
+						{
+							type: 'running',
+						},
+					],
+				},
+			},
+			content: [
+				{
+					type: 'heading',
+					attrs: {
+						id: 'a760aa29-d165-4eee-9da4-4b452c5315c7',
+						level: 1,
+						type: 'chapter',
+					},
+					content: [
+						{
+							type: 'text',
+							text: 'Abstract section',
+						},
+					],
+				},
+				{
+					type: 'paragraph',
+					attrs: {
+						id: 'p-a1e-f3ce9421',
+					},
+					content: [
+						{
+							type: 'text',
+							text: 'Paragrapsh',
+						},
+					],
+				},
+				{
+					type: 'bullet_list',
+					content: [
+						{
+							type: 'list_item',
+							content: [
+								{
+									type: 'paragraph',
+									attrs: {
+										id: 'p-a1e-8cc8f7c3',
+									},
+									content: [
+										{
+											type: 'text',
+											text: 'List',
+										},
+									],
+								},
+							],
+						},
+						{
+							type: 'list_item',
+							content: [
+								{
+									type: 'paragraph',
+									attrs: {
+										id: 'f3ce9421',
+									},
+									content: [
+										{
+											type: 'text',
+											text: 'a',
+										},
+									],
+								},
+							],
+						},
+						{
+							type: 'list_item',
+							content: [
+								{
+									type: 'paragraph',
+									attrs: {
+										id: 'c7c5ce1e',
+									},
+									content: [
+										{
+											type: 'text',
+											text: 'b',
+										},
+									],
+								},
+							],
+						},
+					],
+				},
+				{
+					type: 'figure',
+					attrs: {
+						id: 'p-a1e-3e4c374e',
+						src: '',
+						alt: '',
+						type: 'native-table',
+						orientation: 'portrait',
+						'scale-width': 1,
+					},
+					content: [
+						{
+							type: 'table',
+							attrs: {
+								id: 'cagw4ca7ufllf',
+							},
+							content: [
+								{
+									type: 'table_row',
+									attrs: {
+										id: 'cagw4-8e765de6',
+									},
+									content: [
+										{
+											type: 'table_header',
+											attrs: {
+												colspan: 1,
+												rowspan: 1,
+												colwidth: null,
+												background: null,
+											},
+											content: [
+												{
+													type: 'paragraph',
+													attrs: {
+														id: '3d189bc7',
+													},
+													content: [
+														{
+															type: 'text',
+															text: 'a',
+														},
+													],
+												},
+											],
+										},
+										{
+											type: 'table_header',
+											attrs: {
+												colspan: 1,
+												rowspan: 1,
+												colwidth: null,
+												background: null,
+											},
+											content: [
+												{
+													type: 'paragraph',
+													attrs: {
+														id: 'f3ce9421af',
+													},
+													content: [
+														{
+															type: 'text',
+															text: 'b',
+														},
+													],
+												},
+											],
+										},
+										{
+											type: 'table_header',
+											attrs: {
+												colspan: 1,
+												rowspan: 1,
+												colwidth: null,
+												background: null,
+											},
+											content: [
+												{
+													type: 'paragraph',
+													attrs: {
+														id: 'f3ce9421ea',
+													},
+													content: [
+														{
+															type: 'text',
+															text: 'c',
+														},
+													],
+												},
+											],
+										},
+									],
+								},
+								{
+									type: 'table_row',
+									attrs: {
+										id: 'cagw4-177fdd2f',
+									},
+									content: [
+										{
+											type: 'table_cell',
+											attrs: {
+												colspan: 1,
+												rowspan: 1,
+												colwidth: null,
+												background: null,
+											},
+											content: [
+												{
+													type: 'paragraph',
+													attrs: {
+														id: 'f3ce94211e',
+													},
+													content: [
+														{
+															type: 'text',
+															text: 'c',
+														},
+													],
+												},
+											],
+										},
+										{
+											type: 'table_cell',
+											attrs: {
+												colspan: 1,
+												rowspan: 1,
+												colwidth: null,
+												background: null,
+											},
+											content: [
+												{
+													type: 'paragraph',
+													attrs: {
+														id: 'f3ce9421a6',
+													},
+													content: [
+														{
+															type: 'text',
+															text: 'd',
+														},
+													],
+												},
+											],
+										},
+										{
+											type: 'table_cell',
+											attrs: {
+												colspan: 1,
+												rowspan: 1,
+												colwidth: null,
+												background: null,
+											},
+											content: [
+												{
+													type: 'paragraph',
+													attrs: {
+														id: 'f3ce9421f5',
+													},
+													content: [
+														{
+															type: 'text',
+															text: 'e',
+														},
+													],
+												},
+											],
+										},
+									],
+								},
+							],
+						},
+						{
+							type: 'caption',
+							content: [
+								{
+									type: 'paragraph',
+									attrs: {
+										id: 'jvo6wone2881',
+									},
+									content: [
+										{
+											type: 'text',
+											text: 'table title',
+										},
+									],
+								},
+							],
+						},
+					],
+				},
+				{
+					type: 'paragraph',
+					attrs: {
+						id: 'p-a1e-bb784eb5',
+					},
+				},
+			],
+		},
+		{
+			type: 'paragraph',
+			attrs: {
+				id: '95b4c5ca',
+			},
+		},
+		{
+			type: 'paragraph',
+			attrs: {
+				id: 'c7753aca',
+			},
+		},
+		{
+			type: 'paragraph',
+			attrs: {
+				id: '9e060aa4',
+			},
+		},
+		{
+			type: 'part',
+			attrs: {
+				id: 'rlamrrzawb5tu',
+				type: 'chapter',
+				skipToc: false,
+			},
+			content: [
+				{
+					type: 'heading',
+					attrs: {
+						id: 'svuae767xbog',
+						level: 1,
+						type: 'chapter',
+					},
+					content: [
+						{
+							type: 'text',
+							text: 'Chapter title',
+						},
+					],
+				},
+			],
+		},
+	],
+};
+
 export default {
 	components: {
 		PkpButton,
@@ -182,15 +570,6 @@ export default {
 			type: Object,
 			required: true,
 		},
-	},
-	mounted() {
-		this.editor = new Editor({
-			extensions: [TextStyle.configure({types: [ListItem.name]}), StarterKit],
-			content: '<p>Body text here</p>',
-		});
-	},
-	beforeUnmount() {
-		this.editor.destroy();
 	},
 	data() {
 		return {
@@ -231,6 +610,57 @@ export default {
 			}
 		},
 	},
+	mounted() {
+		this.editor = new Editor({
+			extensions: [
+				/*StarterKit.configure({
+					heading: false, // Disable default to use custom
+					paragraph: false, // Disable default to use custom
+					// Configure others as needed, e.g., history: false
+				}),*/
+				CustomDocument,
+				Text,
+				HardBreak,
+				Anchor,
+				Bdi,
+				Blockquote,
+				Caption,
+				Citation,
+				Code,
+				Figure,
+				Footnote,
+				Header,
+				Heading,
+				HorizontalRule,
+				Image,
+				Label,
+				Link,
+				Math,
+				PageBreak,
+				Paragraph,
+				Part,
+				Placeholder,
+				Sidebar,
+				Subtitle,
+				Subscript,
+				Superscript,
+				Tags,
+				CustomListItem,
+				CustomBulletList,
+				CustomOrderedList,
+				CustomTable,
+				CustomTableRow,
+				CustomTableCell,
+				CustomTableHeader,
+				Emphasis,
+				Strong,
+			],
+			content: documentExampleJson,
+		});
+	},
+	beforeUnmount() {
+		this.editor.destroy();
+	},
 	created() {
 		this.fetchBodyTextFile();
 	},
@@ -248,8 +678,10 @@ export default {
 				},
 				error: this.ajaxErrorCallback,
 				success(r) {
-					//this.workingBodyTextProps = r;
-					this.editor.commands.setContent(r.bodyTextContent);
+					this.workingBodyTextProps = r;
+					if (r.bodyTextContent?.trim()) {
+						this.editor.commands.setContent(r.bodyTextContent);
+					}
 					this.hasLoadedContent = true;
 				},
 			});
