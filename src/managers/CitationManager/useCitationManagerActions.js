@@ -10,13 +10,16 @@ const {openDialog, openSideModal} = useModal();
 export const Actions = {
 	CITATION_EDIT_CITATION: 'citationEditCitation',
 	CITATION_DELETE_CITATION: 'citationDeleteCitation',
-	CITATION_REPROCESS_CITATION: 'citationReprocessCitation'
+	CITATION_REPROCESS_CITATION: 'citationReprocessCitation',
 };
 
 export function useCitationManagerActions() {
 	const {t} = useLocalize();
 
-	function citationEditCitation({publication, componentForms, citation}, finishedCallback) {
+	function citationEditCitation(
+		{publication, componentForms, citation},
+		finishedCallback,
+	) {
 		if (!citation.authors) {
 			citation.authors = [];
 		}
@@ -37,11 +40,14 @@ export function useCitationManagerActions() {
 			citation: citation,
 			onSuccess: () => {
 				finishedCallback();
-			}
+			},
 		});
 	}
 
-	function citationDeleteCitation({publication, componentForms, citation}, finishedCallback) {
+	function citationDeleteCitation(
+		{publication, componentForms, citation},
+		finishedCallback,
+	) {
 		openDialog({
 			title: t('common.delete'),
 			message: t('common.confirmDelete'),
@@ -53,60 +59,60 @@ export function useCitationManagerActions() {
 					callback: async (close) => {
 						const {apiUrl} = useUrl(`citations`);
 						const {fetch} = useFetch(`${apiUrl.value}/${citation.id}`, {
-							method: 'DELETE'
+							method: 'DELETE',
 						});
 						await fetch();
 						finishedCallback();
 						close();
-					}
+					},
 				},
 				{
 					label: t('common.cancel'),
 					isSecondary: true,
 					callback: (close) => {
 						close();
-					}
-				}
-			]
+					},
+				},
+			],
 		});
 	}
 
 	function citationReprocessCitation({citation}, finishedCallback) {
 		openDialog({
-			title: 'Are you sure you want to reprocess this citation?',
+			title: t('submission.citations.structured.reprocessDialog.title'),
 			message: '',
 			actions: [
 				{
 					label: t('common.ok'),
-					isWarnable: true,
+					isPrimary: true,
 					callback: async (close) => {
 						const {apiUrl} = useUrl(`citations`);
 						const {fetch} = useFetch(
 							`${apiUrl.value}/${citation.id}/reprocessCitation`,
 							{
 								method: 'POST',
-								body: {}
-							}
+								body: {},
+							},
 						);
 						await fetch();
 						finishedCallback();
 						close();
-					}
+					},
 				},
 				{
 					label: t('common.cancel'),
 					isSecondary: true,
 					callback: (close) => {
 						close();
-					}
-				}
-			]
+					},
+				},
+			],
 		});
 	}
 
 	return {
 		citationEditCitation,
 		citationDeleteCitation,
-		citationReprocessCitation
+		citationReprocessCitation,
 	};
 }
