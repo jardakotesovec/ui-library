@@ -1,17 +1,17 @@
-import {computed, onUnmounted, ref, toRefs} from 'vue';
-import {useUrl} from '@/composables/useUrl';
-import {useFetch} from '@/composables/useFetch';
+import {computed, toRefs} from 'vue';
 import {defineComponentStore} from '@/utils/defineComponentStore';
 import {useExtender} from '@/composables/useExtender';
+import {useDataChanged} from '@/composables/useDataChanged';
 import {useDataCitationManagerConfig} from './useDataCitationManagerConfig';
 import {useDataCitationManagerActions} from './useDataCitationManagerActions';
 
 export const useDataCitationManagerStore = defineComponentStore(
 	'dataCitationManager',
 	(props) => {
-
 		const extender = useExtender();
-		const dataCitationManagerConfig = extender.addFns(useDataCitationManagerConfig());
+		const dataCitationManagerConfig = extender.addFns(
+			useDataCitationManagerConfig(),
+		);
 		const columns = computed(() => dataCitationManagerConfig.getColumns());
 		const topItems = computed(() => dataCitationManagerConfig.getTopItems());
 
@@ -22,18 +22,15 @@ export const useDataCitationManagerStore = defineComponentStore(
 			});
 		}
 
-		const {
-			submission,
-			publication,
-		} = toRefs(props);
-		
-		const { apiUrl } = useUrl(`dataCitations/publications/${publication.value.id}`);
-		const {data: apiResponse, fetch: fetchDataCitations} = useFetch(apiUrl, {
-			method: 'GET',
-		});
+		const {submission, publication} = toRefs(props);
 
-		fetchDataCitations();
-		const dataCitations = computed(() => { return apiResponse.value?.items ?? []; });
+		// Get data citations directly from publication prop
+		const dataCitations = computed(
+			() => publication.value?.dataCitations ?? [],
+		);
+
+		// Use triggerDataChange to notify parent to refetch submission/publication
+		const {triggerDataChange} = useDataChanged();
 
 		/**
 		 * Actions
@@ -41,7 +38,7 @@ export const useDataCitationManagerStore = defineComponentStore(
 		const dataCitationManagerActions = useDataCitationManagerActions();
 
 		function dataUpdateCallback() {
-			fetchDataCitations();
+			triggerDataChange();
 		}
 
 		function getActionArgs(additionalArgs = {}) {
@@ -52,7 +49,7 @@ export const useDataCitationManagerStore = defineComponentStore(
 				...additionalArgs,
 			};
 		}
-		function dataCitationAddDataCitation({}) {
+		function dataCitationAddDataCitation() {
 			dataCitationManagerActions.dataCitationAddDataCitation(
 				getActionArgs({}),
 				dataUpdateCallback,
