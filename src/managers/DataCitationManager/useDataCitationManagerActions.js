@@ -1,97 +1,103 @@
-import {useLocalize} from '@/composables/useLocalize';
-import {useLegacyGridUrl} from '@/composables/useLegacyGridUrl';
+import {useForm} from '@/composables/useForm';
+import DataCitationEditModal from '@/managers/DataCitationManager/modals/DataCitationEditModal.vue';
 import {useModal} from '@/composables/useModal';
-import {useFetch, getCSRFToken} from '@/composables/useFetch';
-export const Actions = {
-	DATA_CITATION_LIST: 'dataCitationList',
-	DATA_CITATION_ADD: 'dataCitationAdd',
-	DATA_CITATION_EDIT: 'dataCitationEdit',
-	DATA_CITATION_DELETE: 'dataCitationDelete',
-	DATA_CITATION_SORT: 'dataCitationSort',
-};
+import {useLocalize} from '@/composables/useLocalize';
+import {useUrl} from '@/composables/useUrl';
+import {cloneDeep} from 'lodash';
+import {useFetch} from '@/composables/useFetch';
 
-export function useDataCitationManagerActions({dataCitationGridComponent}) {
+export const Actions = {
+	DATA_CITATION_ADD_DATA_CITATION: 'dataCitationAddDataCitation',
+	DATA_CITATION_EDIT_DATA_CITATION: 'dataCitationEditDataCitation',
+	DATA_CITATION_DELETE_DATA_CITATION: 'dataCitationDeleteDataCitation',
+};
+export function useDataCitationManagerActions() {
+	const {openDialog, openSideModal} = useModal();
 	const {t} = useLocalize();
 
-	function dataCitationAdd({submission, publication}, finishedCallback) {
-		const {openLegacyModal} = useLegacyGridUrl({
-			component: dataCitationGridComponent,
-			op: 'addDataCitation',
-			params: {
-				submissionId: submission.id,
-				publicationId: publication.id,
+	function dataCitationAddDataCitation(
+		{publication, dataCitationEditForm},
+		finishedCallback,
+	) {
+
+		const { apiUrl } = useUrl(`dataCitations/publications/${publication.id}`);
+		const addForm = cloneDeep(dataCitationEditForm);
+
+		const {form, setAction} = useForm(addForm);
+		setAction(apiUrl.value);
+		openSideModal(DataCitationEditModal, {
+			title: t('submission.dataCitations.addModal.title'),
+			form: form,
+			onSuccess: () => {
+				finishedCallback();
 			},
 		});
-
-		openLegacyModal({title: t('submission.dataCitation.add')}, finishedCallback);
 	}
 
-	function dataCitationEdit({submission, publication, dataCitation}, finishedCallback) {
-		const {openLegacyModal} = useLegacyGridUrl({
-			component: dataCitationGridComponent,
-			op: 'editDataCitation',
-			params: {
-				submissionId: submission.id,
-				publicationId: publication.id,
-				dataCitationId: dataCitation.id,
+	function dataCitationEditDataCitation(
+		{publication, dataCitationEditForm, dataCitation},
+		finishedCallback,
+	) {
+		if (!dataCitation.authors) {
+			dataCitation.authors = [];
+		}
+		
+		dataCitation.id = dataCitation.id ?? dataCitation.dataCitationId;
+		const { apiUrl } = useUrl(`dataCitations/publications/${publication.id}/${dataCitation.id}`);
+		const editForm = cloneDeep(dataCitationEditForm);
+
+		const {form, set, setValues, setAction, setMethod} = useForm(editForm);
+		setValues(dataCitation);
+		setAction(apiUrl.value);
+		setMethod('PUT');
+		openSideModal(DataCitationEditModal, {
+			title: t('submission.dataCitations.editModal.title'),
+			form: form,
+			dataCitation: dataCitation,
+			onSet: set,
+			onSuccess: () => {
+				finishedCallback();
 			},
 		});
-
-		openLegacyModal({title: t('submission.dataCitation.edit')}, finishedCallback);
 	}
 
-	function dataCitationDelete({submission, publication, dataCitation}, finishedCallback) {
-		const {openDialog, openDialogNetworkError} = useModal();
+	function dataCitationDeleteDataCitation(
+		{publication, dataCitation},
+		finishedCallback,
+	) {
 		openDialog({
+			title: t('common.delete'),
+			message: t('common.confirmDelete'),
+			modalStyle: 'negative',
 			actions: [
 				{
 					label: t('common.ok'),
 					isWarnable: true,
 					callback: async (close) => {
-						// http://localhost:7002/index.php/publicknowledge/$$$call$$$/grid/dataCitations/dataCitation-grid/delete-dataCitation
-						// ?submissionId=17&publicationId=22&dataCitation=9
-						const {url} = useLegacyGridUrl({
-							component: dataCitationGridComponent,
-							op: 'deleteDataCitation',
-							params: {
-								submissionId: submission.id,
-								publicationId: publication.id,
-								dataCitationId: dataCitation.id,
-							},
-						});
-						const formData = new FormData();
-						formData.append('csrfToken', getCSRFToken());
-
-						const {fetch, data} = useFetch(url, {
-							method: 'POST',
-							body: formData,
+						dataCitation.id = dataCitation.id ?? dataCitation.dataCitationId;
+						const {apiUrl} = useUrl(`dataCitations/publications/${publication.id}`);
+						const {fetch} = useFetch(`${apiUrl.value}/${dataCitation.id}`, {
+							method: 'DELETE',
 						});
 						await fetch();
-						close();
 						finishedCallback();
-
-						if (data.value.status !== true) {
-							openDialogNetworkError();
-						}
+						close();
 					},
 				},
 				{
 					label: t('common.cancel'),
+					isSecondary: true,
 					callback: (close) => {
 						close();
-						finishedCallback();
 					},
 				},
 			],
-			title: t('common.delete'),
-			message: t('common.confirmDelete'),
-			modalStyle: 'negative',
 		});
 	}
 
 	return {
-		dataCitationAdd,
-		dataCitationEdit,
-		dataCitationDelete,
+		dataCitationAddDataCitation,
+		dataCitationEditDataCitation,
+		dataCitationDeleteDataCitation,
 	};
 }

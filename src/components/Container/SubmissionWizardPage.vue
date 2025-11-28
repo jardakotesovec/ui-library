@@ -7,6 +7,7 @@ import File from '../File/File.vue';
 import Modal from '../Modal/Modal.vue';
 import ReconfigureSubmissionModal from '@/pages/submissionWizard/ReconfigureSubmissionModal.vue';
 import SubmissionFilesListPanel from '../ListPanel/submissionFiles/SubmissionFilesListPanel.vue';
+import DataCitationManager from '@/managers/DataCitationManager/DataCitationManager.vue';
 import ajaxError from '@/mixins/ajaxError';
 import autosave from '@/mixins/autosave';
 import dialog from '@/mixins/dialog';
@@ -23,6 +24,7 @@ export default {
 		File,
 		Modal,
 		SubmissionFilesListPanel,
+		DataCitationManager
 	},
 	extends: Page,
 	mixins: [ajaxError, autosave, dialog, localizeSubmission, localStorage],

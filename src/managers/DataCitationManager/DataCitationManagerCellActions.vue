@@ -1,32 +1,32 @@
 <template>
-	<TableCell class="w-28">
-		<TableRowSortControls
-			v-if="dataCitationManagerStore.sortingEnabled"
-			@up="dataCitationManagerStore.sortMoveUp(dataCitation.id)"
-			@down="dataCitationManagerStore.sortMoveDown(dataCitation.id)"
-		/>
+	<TableCell>
 		<DropdownActions
-			v-if="
-				!dataCitationManagerStore.sortingEnabled &&
-				dataCitationManagerStore.itemActions.length
-			"
-			:label="t('common.moreActions')"
 			button-variant="ellipsis"
-			:actions="dataCitationManagerStore.itemActions"
-			@action="(actionName) => dataCitationManagerStore[actionName]({dataCitation})"
-		></DropdownActions>
+			:label="t('common.moreActions')"
+			:actions="dataCitationManagerStore.getItemActions({dataCitation})"
+			@action="(actionName) => handleAction(actionName, dataCitation)"
+		/>
 	</TableCell>
 </template>
-<script setup>
-import {useDataCitationManagerStore} from './dataCitationManagerStore';
-import TableRowSortControls from './TableRowSortControls.vue';
 
-defineProps({
+<script setup>
+import {computed} from 'vue';
+import {useLocalize} from '@/composables/useLocalize';
+import TableCell from '@/components/Table/TableCell.vue';
+import DropdownActions from '@/components/DropdownActions/DropdownActions.vue';
+import {useDataCitationManagerStore} from './dataCitationManagerStore.js';
+
+const {t} = useLocalize();
+
+const props = defineProps({
 	dataCitation: {type: Object, required: true},
 });
 
-import TableCell from '@/components/Table/TableCell.vue';
-import DropdownActions from '@/components/DropdownActions/DropdownActions.vue';
+const dataCitation = computed(() => props.dataCitation);
 
 const dataCitationManagerStore = useDataCitationManagerStore();
+
+function handleAction(actionName, dataCitation) {
+	dataCitationManagerStore[actionName]({dataCitation});
+}
 </script>

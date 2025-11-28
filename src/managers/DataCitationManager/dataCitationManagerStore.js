@@ -1,214 +1,90 @@
+import {computed, onUnmounted, ref, toRefs} from 'vue';
+import {useUrl} from '@/composables/useUrl';
+import {useFetch} from '@/composables/useFetch';
 import {defineComponentStore} from '@/utils/defineComponentStore';
-import {ref, computed, toRefs} from 'vue';
-import {useFetch, getCSRFToken} from '@/composables/useFetch';
-import {useModal} from '@/composables/useModal';
-import {useDataCitationManagerActions} from './useDataCitationManagerActions';
-import {useDataChanged} from '@/composables/useDataChanged';
-import {useDataCitationManagerConfig} from './useDataCitationManagerConfig';
-import {useLegacyGridUrl} from '@/composables/useLegacyGridUrl';
 import {useExtender} from '@/composables/useExtender';
-import { onMounted } from 'vue';
+import {useDataCitationManagerConfig} from './useDataCitationManagerConfig';
+import {useDataCitationManagerActions} from './useDataCitationManagerActions';
 
 export const useDataCitationManagerStore = defineComponentStore(
 	'dataCitationManager',
 	(props) => {
+
 		const extender = useExtender();
-
-		const {submission, publication} = toRefs(props);
-
-		onMounted(() => {
-			console.log('📦 publication:', props.publication);
-		});
-
-		const dataCitations = computed(() => {
-			return sortingEnabled.value
-				? dataCitationsOrdered.value
-				: props?.publication?.dataCitations || [];
-		});
-
-		/** Reload files when data on screen changes */
-
-		/** Columns */
 		const dataCitationManagerConfig = extender.addFns(useDataCitationManagerConfig());
 		const columns = computed(() => dataCitationManagerConfig.getColumns());
+		const topItems = computed(() => dataCitationManagerConfig.getTopItems());
 
-		/**
-		 * Configs
-		 */
-		const dataCitationConfig = computed(() =>
-			dataCitationManagerConfig.getManagerConfig({
-				submission,
-				publication,
-			}),
-		);
-
-		const itemActions = computed(() =>
-			dataCitationManagerConfig.getItemActions(getActionArgs()),
-		);
-		const bottomItems = computed(() =>
-			dataCitationManagerConfig.getBottomItems(getActionArgs()),
-		);
-		const topItems = computed(() =>
-			dataCitationManagerConfig.getTopItems(getActionArgs()),
-		);
-
-		/**
-		 * Sorting
-		 */
-		const dataCitationsOrdered = ref([]);
-		const sortingEnabled = ref(false);
-		function startSorting() {
-			dataCitationsOrdered.value = [...props.publication.dataCitations];
-			sortingEnabled.value = true;
-		}
-		async function saveSorting() {
-			const {openDialogNetworkError} = useModal();
-			const {url} = useLegacyGridUrl({
-				component: 'grid.dataCitations.DataCitationGridHandler',
-				op: 'saveSequence',
-				params: {
-					submissionId: props.submission.id,
-					publicationId: props.publication.id,
-				},
+		function getItemActions({dataCitation}) {
+			return dataCitationManagerConfig.getItemActions({
+				dataCitation,
+				store,
 			});
-
-			const sequence = dataCitationsOrdered.value.map((dataCitation) => dataCitation.id);
-
-			const formData = new FormData();
-			formData.append('csrfToken', getCSRFToken());
-			formData.append('data', sequence);
-
-			const payload = {
-				csrfToken: getCSRFToken(),
-				data: JSON.stringify(sequence),
-			};
-
-			const body = new URLSearchParams(payload);
-
-			const {fetch, data} = useFetch(url, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/x-www-form-urlencoded',
-				},
-				body,
-			});
-			await fetch();
-			if (data.value.status !== true) {
-				openDialogNetworkError();
-			}
-			await triggerDataChange();
-			sortingEnabled.value = false;
 		}
 
-		function sortMoveDown(itemId) {
-			const index = dataCitationsOrdered.value.findIndex(
-				(dataCitation) => dataCitation.id === itemId,
-			);
+		const {
+			submission,
+			publication,
+		} = toRefs(props);
+		
+		const { apiUrl } = useUrl(`dataCitations/publications/${publication.value.id}`);
+		const {data: apiResponse, fetch: fetchDataCitations} = useFetch(apiUrl, {
+			method: 'GET',
+		});
 
-			if (index === dataCitationsOrdered.value.length - 1) {
-				return;
-			}
-
-			const tempArray = [...dataCitationsOrdered.value];
-			const tempItem = tempArray[index];
-			tempArray[index] = tempArray[index + 1];
-			tempArray[index + 1] = tempItem;
-
-			dataCitationsOrdered.value = tempArray;
-		}
-
-		function sortMoveUp(itemId) {
-			const index = dataCitationsOrdered.value.findIndex(
-				(dataCitation) => dataCitation.id === itemId,
-			);
-
-			if (index === 0) {
-				return;
-			}
-
-			const temp = dataCitationsOrdered.value[index];
-			dataCitationsOrdered.value[index] = dataCitationsOrdered.value[index - 1];
-			dataCitationsOrdered.value[index - 1] = temp;
-		}
+		fetchDataCitations();
+		const dataCitations = computed(() => { return apiResponse.value?.items ?? []; });
 
 		/**
 		 * Actions
 		 */
-		const dataCitationManagerActions = useDataCitationManagerActions({
-			dataCitationGridComponent: dataCitationManagerConfig.getDataCitationGridComponent(),
-		});
+		const dataCitationManagerActions = useDataCitationManagerActions();
 
-		function getActionArgs() {
+		function dataUpdateCallback() {
+			fetchDataCitations();
+		}
+
+		function getActionArgs(additionalArgs = {}) {
 			return {
-				config: dataCitationConfig.value,
-				dataCitations: dataCitations,
-				publication: publication.value,
+				submission: props.submission,
+				publication: props.publication,
+				dataCitationEditForm: props.dataCitationEditForm,
+				...additionalArgs,
 			};
 		}
-
-		const {triggerDataChange} = useDataChanged();
-
-		function triggerDataChangeCallback() {
-			triggerDataChange();
+		function dataCitationAddDataCitation({}) {
+			dataCitationManagerActions.dataCitationAddDataCitation(
+				getActionArgs({}),
+				dataUpdateCallback,
+			);
 		}
-
-		function dataCitationAdd() {
-			dataCitationManagerActions.dataCitationAdd(
-				{
-					publication: props.publication,
-					submission: props.submission,
-				},
-				triggerDataChangeCallback,
+		function dataCitationEditDataCitation({dataCitation}) {
+			dataCitationManagerActions.dataCitationEditDataCitation(
+				getActionArgs({dataCitation}),
+				dataUpdateCallback,
+			);
+		}
+		function dataCitationDeleteDataCitation({dataCitation}) {
+			dataCitationManagerActions.dataCitationDeleteDataCitation(
+				getActionArgs({dataCitation}),
+				dataUpdateCallback,
 			);
 		}
 
-		function dataCitationEdit({dataCitation}) {
-			dataCitationManagerActions.dataCitationEdit(
-				{
-					dataCitation,
-					publication: props.publication,
-					submission: props.submission,
-				},
-				triggerDataChangeCallback,
-			);
-		}
-
-		function dataCitationDelete({dataCitation}) {
-			dataCitationManagerActions.dataCitationDelete(
-				{
-					dataCitation,
-					publication: props.publication,
-					submission: props.submission,
-				},
-				triggerDataChangeCallback,
-			);
-		}
-
-		return {
-			submission: props.submission,
-			publication: props.publication,
-			dataCitations,
-
-			/** Config */
+		const store = {
 			columns,
-			itemActions,
 			topItems,
-			bottomItems,
+			getItemActions,
 
-			/** Sorting */
-			sortingEnabled,
-			startSorting,
-			saveSorting,
-			sortMoveDown,
-			sortMoveUp,
+			submission,
+			publication,
 
-			/** Actions */
-			dataCitationAdd,
-			dataCitationEdit,
-			dataCitationDelete,
-
-			/** Extender */
-			extender,
+			dataCitations,
+			dataCitationAddDataCitation,
+			dataCitationEditDataCitation,
+			dataCitationDeleteDataCitation,
 		};
+
+		return store;
 	},
 );
