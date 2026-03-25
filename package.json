@@ -13,7 +13,7 @@
     "storybookWithProxy": "cross-env STORYBOOK_APP_DOMAIN_URL=http://localhost:7001  storybook dev -p 6006",
     "build-storybook": "storybook build --stats-json",
     "test:visual": "vitest --project storybook --run",
-    "test": "vitest"
+    "test": "vitest --project unit"
   },
   "dependencies": {
     "@atlaskit/pragmatic-drag-and-drop": "^1.7.7",

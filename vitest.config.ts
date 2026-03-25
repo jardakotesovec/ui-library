@@ -25,6 +25,13 @@ export default defineConfig({
 		projects: [
 			{
 				extends: true,
+				test: {
+					name: 'unit',
+					include: ['src/**/*.test.{js,ts}'],
+				},
+			},
+			{
+				extends: true,
 				plugins: [
 					vue(),
 					storybookTest({configDir: path.join(dirname, '.storybook')}),
