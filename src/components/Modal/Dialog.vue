@@ -250,4 +250,13 @@ function onClose(triggerOrigin) {
 		animation: sideModalContentExitDesktop 200ms ease-in forwards;
 	}
 }
+
+@media (prefers-reduced-motion: reduce) {
+	.DialogOverlay[data-state='open'],
+	.DialogOverlay[data-state='closed'],
+	.DialogContent[data-state='open'],
+	.DialogContent[data-state='closed'] {
+		animation: none;
+	}
+}
 </style>

@@ -91,4 +91,11 @@ provide('closeModalButton', closeModalButton);
 .DialogOverlay[data-state='closed'] {
 	animation: sideModalFadeOut 300ms ease-in;
 }
+
+@media (prefers-reduced-motion: reduce) {
+	.DialogOverlay[data-state='open'],
+	.DialogOverlay[data-state='closed'] {
+		animation: none;
+	}
+}
 </style>
