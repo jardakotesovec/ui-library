@@ -235,6 +235,15 @@ html[dir='rtl'] .DialogContent[data-state='open'] {
 html[dir='rtl'] .DialogContent[data-state='closed'] {
 	animation: sideModalSlideOutRtl 450ms ease-in-out;
 }
+
+@media (prefers-reduced-motion: reduce) {
+	.DialogContent[data-state='open'],
+	.DialogContent[data-state='closed'],
+	html[dir='rtl'] .DialogContent[data-state='open'],
+	html[dir='rtl'] .DialogContent[data-state='closed'] {
+		animation: none;
+	}
+}
 </style>
 <style>
 /** #11693 reka-ui sets pointer-events: none on body when modal is opened */
