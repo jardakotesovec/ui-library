@@ -549,26 +549,26 @@ export function useDashboardConfigEditorialActivity() {
 				},
 			];
 		}
-		// if the submission moved to editorial / production stage
+		// If the review round has been terminally closed (Accept / Decline / SentToExternal)
+		// and the reviewer never completed the review, surface it as "Incomplete".
+		const roundClosed = [
+			pkp.const.REVIEW_ROUND_STATUS_ACCEPTED,
+			pkp.const.REVIEW_ROUND_STATUS_DECLINED,
+			pkp.const.REVIEW_ROUND_STATUS_SENT_TO_EXTERNAL,
+		].includes(reviewAssignment.reviewRoundStatus);
+
 		if (
-			[
-				pkp.const.WORKFLOW_STAGE_ID_EDITING,
-				pkp.const.WORKFLOW_STAGE_ID_PRODUCTION,
-			].includes(reviewAssignment.submissionStageId)
+			roundClosed &&
+			!CompletedReviewAssignmentStatuses.includes(reviewAssignment.status)
 		) {
-			// It the review assignment is incomplete
-			if (
-				!CompletedReviewAssignmentStatuses.includes(reviewAssignment.status)
-			) {
-				return [
-					{
-						component: 'DashboardCellReviewAssignmentActivityAlert',
-						props: {
-							alert: t(`submissions.incomplete`),
-						},
+			return [
+				{
+					component: 'DashboardCellReviewAssignmentActivityAlert',
+					props: {
+						alert: t(`submissions.incomplete`),
 					},
-				];
-			}
+				},
+			];
 		}
 
 		if (

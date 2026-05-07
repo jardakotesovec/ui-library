@@ -31,15 +31,16 @@ const props = defineProps({
 });
 
 const actionLabel = computed(() => {
-	// Submission progress to copyediting/production stage
-	if (
-		[
-			pkp.const.WORKFLOW_STAGE_ID_EDITING,
-			pkp.const.WORKFLOW_STAGE_ID_PRODUCTION,
-		].includes(props.item.submissionStageId)
-	) {
-		// It the review assignment is incomplete, show no action
-		// for complete scenario it will fallback to the 'View' below
+	// If the review round has been terminally closed (Accept / Decline / SentToExternal),
+	// the assignment is archived from the reviewer's perspective: hide the in-flight
+	// action and fall through to "View" only when the review was actually completed.
+	const roundClosed = [
+		pkp.const.REVIEW_ROUND_STATUS_ACCEPTED,
+		pkp.const.REVIEW_ROUND_STATUS_DECLINED,
+		pkp.const.REVIEW_ROUND_STATUS_SENT_TO_EXTERNAL,
+	].includes(props.item.reviewRoundStatus);
+
+	if (roundClosed) {
 		if (!CompletedReviewAssignmentStatuses.includes(props.item.status)) {
 			return null;
 		}

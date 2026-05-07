@@ -9,6 +9,7 @@ import WorkflowSelectRevisionFormModal from '@/pages/workflow/modals/WorkflowSel
 
 export const Actions = {
 	DECISION_ACCEPT: 'decisionAccept',
+	DECISION_CONTINUE_TO_COPYEDITING: 'decisionContinueToCopyediting',
 	DECISION_CANCEL_REVIEW_ROUND: 'decisionCancelReviewRound',
 	DECISION_DECLINE: 'decisionDecline',
 	DECISION_EXTERNAL_REVIEW: 'decisionExternalReview',
@@ -139,6 +140,12 @@ export function useWorkflowDecisions({
 				});
 			},
 		);
+	}
+
+	function decisionContinueToCopyediting({submission, reviewRoundId}) {
+		openDecisionPage(submission, pkp.const.DECISION_CONTINUE_TO_COPYEDITING, {
+			reviewRoundId,
+		});
 	}
 
 	function decisionCancelReviewRound({submission, reviewRoundId}) {
@@ -416,6 +423,7 @@ export function useWorkflowDecisions({
 	return {
 		openDecisionPage,
 		decisionAccept,
+		decisionContinueToCopyediting,
 		decisionCancelReviewRound,
 		decisionDecline,
 		decisionRevertDecline,

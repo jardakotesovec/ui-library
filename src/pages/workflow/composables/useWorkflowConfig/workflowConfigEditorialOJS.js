@@ -486,6 +486,23 @@ export const WorkflowConfig = {
 					{
 						component: 'WorkflowActionButton',
 						props: {
+							label: t('editor.submission.decision.continueToCopyediting'),
+							action: DecisionActions.DECISION_CONTINUE_TO_COPYEDITING,
+							isSecondary: true,
+							actionArgs,
+						},
+					},
+					isDecisionAvailable(
+						submission,
+						pkp.const.DECISION_CONTINUE_TO_COPYEDITING,
+					),
+				);
+
+				addItemIf(
+					items,
+					{
+						component: 'WorkflowActionButton',
+						props: {
 							label: t('editor.submission.createNewRound'),
 							action: DecisionActions.DECISION_NEW_EXTERNAL_ROUND,
 							actionArgs,
