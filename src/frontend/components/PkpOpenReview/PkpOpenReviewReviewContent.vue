@@ -38,6 +38,27 @@
 				{{ t('openReview.noCommentsAvailable') }}
 			</p>
 		</template>
+
+		<!-- Competing interests, shown only when the reviewer answered the
+			declaration; older reviews predating the declaration show nothing -->
+		<dl
+			v-if="review.competingInterestsDeclared || review.competingInterests"
+			:class="cn('formQuestions')"
+		>
+			<div :class="cn('formQuestion')">
+				<dt :class="cn('questionText')">
+					{{ t('openReview.competingInterests') }}
+				</dt>
+				<dd
+					v-if="review.competingInterests"
+					v-strip-unsafe-html="review.competingInterests"
+					:class="cn('responseText')"
+				></dd>
+				<dd v-else :class="cn('responseText')">
+					{{ t('openReview.noCompetingInterests') }}
+				</dd>
+			</div>
+		</dl>
 	</div>
 </template>
 

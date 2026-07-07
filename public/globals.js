@@ -959,6 +959,9 @@ window.pkp = {
 		'openReview.roundStatusCompleted': 'Completed',
 		'openReview.roundStatusInProgress': 'In progress',
 		'openReview.noCommentsAvailable': 'No review comments available.',
+		'openReview.competingInterests': 'Competing Interests',
+		'openReview.noCompetingInterests':
+			'No competing interests were disclosed.',
 		'openReview.reviewCount': '{$count} reviews',
 		'openReview.sortBy': 'Sort by',
 		'openReview.sortByReviewRound': 'Review Round',
